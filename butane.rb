@@ -14,7 +14,7 @@ def monitor_room(room, config = {})
     # here
     next if m[:person].strip.empty?  # Ignore anything from a nil / empty person
 
-    delay = 5000 # in milliseconds (time to display the notification)
+    delay = 20000 # in milliseconds (time to display the notification)
 
     # If we're to monitor something in particular in this room, set the 
     # delay notification to zero which will leave the message up until
