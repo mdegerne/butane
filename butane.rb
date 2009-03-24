@@ -15,12 +15,14 @@ def monitor_room(room, config = {})
     next if m[:person].strip.empty?  # Ignore anything from a nil / empty person
 
     delay = 20000 # in milliseconds (time to display the notification)
+    priority = "normal"
 
     # If we're to monitor something in particular in this room, set the 
     # delay notification to zero which will leave the message up until
     # clicked away.
     if sticky
       delay = 0 if m[:message] =~ /#{sticky}/i
+      priority = "critical"
     end
 
     if ignore
@@ -43,7 +45,7 @@ def monitor_room(room, config = {})
     # in the msg.  Assumes that in href=stuff, stuff has no whitespace.
     msg.gsub! /<a[^>]+(href=[^(\s|>)]+)[^>]*>/, '<a \1>'
 
-    `notify-send -t #{delay} #{img_opt} \"#{person} in #{room_name}\" '#{msg}'`
+    `notify-send -u #{priority} -t #{delay} #{img_opt} \"#{person} in #{room_name}\" '#{msg}'`
   end
 end
 
