@@ -20,9 +20,9 @@ def monitor_room(room, config = {})
     # If we're to monitor something in particular in this room, set the 
     # delay notification to zero which will leave the message up until
     # clicked away.
-    if sticky
-      delay = 0 if m[:message] =~ /#{sticky}/i
-      priority = "critical"
+    if sticky && m[:message] =~ /#{sticky}/i
+        delay = 0
+        priority = "critical"
     end
 
     if ignore
