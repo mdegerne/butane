@@ -6,8 +6,13 @@ require 'yaml'
 def notify(title, message = "", options = {})
   img_opt = "-i #{options[:image]}" if options[:image]
   delay_opt = ""
+  priority_opt = ""
   if options[:delay]
     delay_opt = "-t #{options[:delay]}"
+  end
+
+  if options[:priority]
+    priority_opt = "-u #{options[:priority]}"
   end
 
   # Cleanse the message
@@ -23,7 +28,7 @@ def notify(title, message = "", options = {})
   # in the msg.  Assumes that in href=stuff, stuff has no whitespace.
   msg.gsub! /<a[^>]+(href=[^(\s|>)]+)[^>]*>/, '<a \1>'
 
-  `notify-send #{delay_opt} #{img_opt} \"#{title}\" '#{msg}'`
+  `notify-send #{delay_opt} #{priority_opt} #{img_opt} \"#{title}\" '#{msg}'`
 end
 
 def monitor_room(room, config = {})
@@ -58,9 +63,9 @@ def monitor_room(room, config = {})
 
     person = m[:person].gsub /"/, ''  # Get rid of any dquotes since we use 'em to delimit person
 
-    notify("#{person} in #{room_name}", m[:message], :delay => delay, :image => config[:image])
+    notify("#{person} in #{room_name}", m[:message], :delay => delay, :image => config[:image], :priority => priority)
   end
-  notify "Stopped monitoring #{room.name} for some reason", "", :delay => 0
+  notify "Stopped monitoring #{room.name} for some reason", "", :delay => 0, :priority => "critical"
 end
 
 config = YAML::load_file("#{ENV['HOME']}/.butanerc")
